@@ -88,7 +88,6 @@ var closeObstacle = function(obstacle) {
 }
 
 var checkUFOCollisionAfterSetDuck = function(obstacle) {
-	console.log("Current obstacle ducking check: " + Runner.instance_.horizon.obstacles[0])
 	
 	if(obstacle != Runner.instance_.horizon.obstacles[0])
 		Runner.instance_.tRex.setDuck(false);
@@ -101,11 +100,10 @@ Runner.instance_.update = function() {
 	
 	if(hasObstacles && Runner.instance_.tRex != null) {
 		var predictedObstacle = JSON.parse(JSON.stringify(Runner.instance_.horizon.obstacles[0]));
+
 		if(predictedObstacle != null || predictedObstacle.xPos != null) {
-			predictedObstacle.xPos -= Math.pow(Runner.instance_.currentSpeed/2, 2)  + predictedObstacle.width * 2 * Runner.instance_.currentSpeed;
-			console.log("Predicted xPos: " + predictedObstacle.xPos);
-			console.log("TRex xPos: " + Runner.instance_.tRex.xPos);
-			console.log("Real xPos:" + Runner.instance_.horizon.obstacles[0].xPos);
+			predictedObstacle.xPos -= Math.pow(Runner.instance_.currentSpeed/2, 2)  +  Runner.instance_.currentSpeed * 4;
+			
 			if(rawCheckForCollision(predictedObstacle, Runner.instance_.tRex)) {
 				if(Runner.instance_.horizon.obstacles[0].yPos < 89) {
 					Runner.instance_.tRex.setDuck(true);
@@ -120,24 +118,3 @@ Runner.instance_.update = function() {
 	Runner.instance_.defaultUpdate(); 
 }
 
-
-Runner.instance_.updateV2 = function() { 
-	Runner.instance_.defaultUpdate(); 
-	
-	var hasObstacles = Runner.instance_.runningTime > Runner.instance_.config.CLEAR_TIME;
-	
-	if(hasObstacles && Runner.instance_.tRex != null) {
-			var tRex = Runner.instance_.tRex;
-			var obstacle = Runner.instance_.horizon.obstacles[0];
-			
-			var dist = Math.sqrt(Math.pow(tRex.xPos - obstacle.xPos, 2) + Math.pow(tRex.yPos - obstacle.yPos, 2));
-			if(dist <  100) {
-				if(Runner.instance_.horizon.obstacles[0].yPos < 89) {
-					Runner.instance_.tRex.setDuck(true);
-					setTimeout(function() { checkUFOCollisionAfterSetDuck(closeObstacle(Runner.instance_.horizon.obstacles[0])) }, 75);
-				} else {
-						Runner.instance_.tRex.startJump(Runner.instance_.currentSpeed);
-				}
-			}
-		}
-}
