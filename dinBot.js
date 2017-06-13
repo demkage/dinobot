@@ -102,7 +102,7 @@ Runner.instance_.update = function() {
 		var predictedObstacle = JSON.parse(JSON.stringify(Runner.instance_.horizon.obstacles[0]));
 
 		if(predictedObstacle != null || predictedObstacle.xPos != null) {
-			predictedObstacle.xPos -= Math.pow(Runner.instance_.currentSpeed/2, 2)  +  Runner.instance_.currentSpeed * 4;
+			predictedObstacle.xPos -= 2*Math.pow(Runner.instance_.currentSpeed/2, 2)  +  Runner.instance_.currentSpeed * 5;
 			
 			if(rawCheckForCollision(predictedObstacle, Runner.instance_.tRex)) {
 				if(Runner.instance_.horizon.obstacles[0].yPos < 89) {
